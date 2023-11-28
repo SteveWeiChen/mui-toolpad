@@ -2,9 +2,7 @@
   "name": "@mui/toolpad",
   "version": "0.1.38",
   "license": "MIT",
-  "bin": {
-    "toolpad": "./cli.js"
-  },
+  "bin": "./cli.js",
   "scripts": {
     "build": "concurrently \"yarn:build:*\"",
     "dev": "concurrently \"yarn:dev:*\"",
