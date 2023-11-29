@@ -20,7 +20,7 @@
     "prettier": "pretty-quick --ignore-path .eslintignore",
     "prettier:all": "prettier --write . --ignore-path .eslintignore",
     "deduplicate": "node scripts/deduplicate.mjs",
-    "dev": "dotenv cross-env FORCE_COLOR=1 lerna -- run dev --stream --parallel --ignore docs",
+    "dev": "dotenv cross-env FORCE_COLOR=1 lerna -- run dev --stream --parallel --ignore docs,test",
     "docs:dev": "yarn workspace docs dev",
     "docs:build": "yarn workspace docs build",
     "docs:build:api": "tsx --tsconfig ./scripts/tsconfig.json ./scripts/docs/buildApi.ts",

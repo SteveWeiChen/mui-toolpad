@@ -43,3 +43,5 @@ export { CUSTOM_COLUMN_TYPES, inferColumns, parseColumns } from './DataGrid';
 export type { SerializableGridColumn, SerializableGridColumns } from './DataGrid';
 
 export { type ChartDataSeries, type ChartData, CHART_DATA_SERIES_KINDS } from './Chart';
+
+export { default as NavBar } from './NavBar';

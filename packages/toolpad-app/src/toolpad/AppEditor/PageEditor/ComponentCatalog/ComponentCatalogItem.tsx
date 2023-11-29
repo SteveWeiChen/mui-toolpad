@@ -6,6 +6,7 @@ import GridOnIcon from '@mui/icons-material/GridOn';
 import Crop75Icon from '@mui/icons-material/Crop75';
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import LayersIcon from '@mui/icons-material/Layers';
+import DirectionsIcon from '@mui/icons-material/Directions';
 import DnsIcon from '@mui/icons-material/Dns';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import TabIcon from '@mui/icons-material/Tab';
@@ -47,6 +48,7 @@ const iconMap = new Map<string, React.ComponentType<SvgIconProps>>([
   ['Select', ArrowDropDownCircleIcon],
   ['List', ListIcon],
   ['Paper', LayersIcon],
+  ['NavBar', DirectionsIcon],
   ['Form', DnsIcon],
   ['Card', ContactPageIcon],
   ['Tabs', TabIcon],

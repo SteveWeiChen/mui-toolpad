@@ -3,3 +3,12 @@ kind: page
 spec:
   id: lH1StxJ
   title: Default page
+  content:
+    - component: NavBar
+      name: navBar
+      layout:
+        horizontalAlign: end
+      props:
+        showRightActions: true
+        showUserMenu: true
+        background: inherit

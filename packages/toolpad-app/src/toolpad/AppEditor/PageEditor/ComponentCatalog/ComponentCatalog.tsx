@@ -1,14 +1,5 @@
 import * as React from 'react';
-import {
-  Box,
-  Collapse,
-  darken,
-  IconButton,
-  Link,
-  styled,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Box, Collapse, IconButton, Link, styled, Typography, TextField } from '@mui/material';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowDropDownSharpIcon from '@mui/icons-material/ArrowDropDownSharp';
@@ -25,20 +16,7 @@ import { useToolpadComponents } from '../../toolpadComponents';
 import useLocalStorageState from '../../../../utils/useLocalStorageState';
 import HelpTooltipIcon from '../../../../components/HelpTooltipIcon';
 
-interface FutureComponentSpec {
-  url: string;
-  displayName: string;
-}
-
-const FUTURE_COMPONENTS = new Map<string, FutureComponentSpec>([
-  ['Map', { url: 'https://github.com/mui/mui-toolpad/issues/864', displayName: 'Map' }],
-  ['Drawer', { url: 'https://github.com/mui/mui-toolpad/issues/1540', displayName: 'Drawer' }],
-  ['Html', { url: 'https://github.com/mui/mui-toolpad/issues/1311', displayName: 'Html' }],
-  ['Icon', { url: 'https://github.com/mui/mui-toolpad/issues/83', displayName: 'Icon' }],
-  ['Card', { url: 'https://github.com/mui/mui-toolpad/issues/748', displayName: 'Card' }],
-  ['Slider', { url: 'https://github.com/mui/mui-toolpad/issues/746', displayName: 'Slider' }],
-  ['Radio', { url: 'https://github.com/mui/mui-toolpad/issues/744', displayName: 'Radio' }],
-]);
+const NEXUSUI_COMPONENTS = ['NavBar'];
 
 const WIDTH_COLLAPSED = 40;
 
@@ -60,12 +38,8 @@ export default function ComponentCatalog({ className }: ComponentCatalogProps) {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [searchFocused, setSearchFocused] = React.useState(false);
   const [openStart, setOpenStart] = React.useState(0);
-  const [openCustomComponents, setOpenCustomComponents] = useLocalStorageState(
-    'catalog-custom-expanded',
-    true,
-  );
-  const [openFutureComponents, setOpenFutureComponents] = useLocalStorageState(
-    'catalog-future-expanded',
+  const [openMUIComponents, setOpenMUIComponents] = useLocalStorageState(
+    'catalog-mUI-expanded',
     true,
   );
 
@@ -112,10 +86,6 @@ export default function ComponentCatalog({ className }: ComponentCatalogProps) {
 
   const [createCodeComponentDialogOpen, setCreateCodeComponentDialogOpen] = React.useState(false);
 
-  const handleCreateCodeComponentDialogOpen = React.useCallback(() => {
-    setCreateCodeComponentDialogOpen(true);
-    closeDrawer(0);
-  }, [closeDrawer]);
   const handleCreateCodeComponentDialogClose = React.useCallback(
     () => setCreateCodeComponentDialogOpen(false),
     [],
@@ -132,6 +102,16 @@ export default function ComponentCatalog({ className }: ComponentCatalogProps) {
         regex.test(componentName) || component?.synonyms.some((name) => regex.test(name)),
     );
   }, [toolpadComponents, searchTerm]);
+
+  const filteredMUIItems = React.useMemo(
+    () => filteredItems.filter((item: any) => !NEXUSUI_COMPONENTS.includes(item[0])),
+    [filteredItems],
+  );
+
+  const filteredNexusUIItems = React.useMemo(
+    () => filteredItems.filter((item: any) => NEXUSUI_COMPONENTS.includes(item[0])),
+    [filteredItems],
+  );
 
   const drawerOpen = !!openStart || searchFocused;
 
@@ -194,6 +174,7 @@ export default function ComponentCatalog({ className }: ComponentCatalogProps) {
                   onBlur={() => setSearchFocused(false)}
                 />
               </Box>
+
               <Box
                 sx={{
                   flex: 1,
@@ -202,18 +183,46 @@ export default function ComponentCatalog({ className }: ComponentCatalogProps) {
                   scrollbarGutter: 'stable',
                 }}
               >
-                <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gap={1} padding={1}>
-                  {filteredItems.map(([componentId, componentType]) => {
+                <Box
+                  pl={2}
+                  pr={1.5}
+                  pb={0}
+                  display="flex"
+                  flexDirection={'row'}
+                  justifyContent="space-between"
+                >
+                  <Box display="flex" alignItems="center">
+                    <Typography mr={0.5} variant="overline">
+                      NexusUI Components
+                    </Typography>
+                    <HelpTooltipIcon
+                      helpText={
+                        <Typography variant="inherit">
+                          Expand Toolpad with your own NexusUI components.{' '}
+                          <Link
+                            href="https://polite-stone-0cd5ef903.1.azurestaticapps.net/?path=/story/introduction--page"
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            Learn more
+                          </Link>
+                          .
+                        </Typography>
+                      }
+                    />
+                  </Box>
+                </Box>
+                <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gap={1} padding={1} pt={0}>
+                  {filteredNexusUIItems.map(([componentId, componentType]) => {
                     invariant(componentType, `No component definition found for "${componentId}"`);
-                    return componentType.builtIn && !componentType.system ? (
+                    return componentType.builtIn ? (
                       <ComponentCatalogItem
                         key={componentId}
                         id={componentId}
                         draggable
                         onDragStart={handleDragStart(componentId)}
                         displayName={componentType.displayName}
-                        builtIn={componentType.builtIn}
-                        kind={'builtIn'}
+                        kind={'custom'}
                       />
                     ) : null;
                   })}
@@ -229,14 +238,14 @@ export default function ComponentCatalog({ className }: ComponentCatalogProps) {
                 >
                   <Box display="flex" alignItems="center">
                     <Typography mr={0.5} variant="overline">
-                      Custom Components
+                      MUI Components
                     </Typography>
                     <HelpTooltipIcon
                       helpText={
                         <Typography variant="inherit">
-                          Expand Toolpad with your own React components.{' '}
+                          Expand Toolpad with your own MUI components.{' '}
                           <Link
-                            href="https://mui.com/toolpad/concepts/custom-components"
+                            href="https://mui.com/material-ui/react-autocomplete/"
                             target="_blank"
                             rel="noopener"
                           >
@@ -248,104 +257,41 @@ export default function ComponentCatalog({ className }: ComponentCatalogProps) {
                     />
                   </Box>
                   <IconButton
-                    aria-label="Expand custom components"
+                    aria-label="Expand mui components"
                     sx={{
                       p: 0,
                       height: '100%',
                       alignSelf: 'center',
                       cursor: 'pointer',
-                      transform: `rotate(${openCustomComponents ? 180 : 0}deg)`,
+                      transform: `rotate(${openMUIComponents ? 180 : 0}deg)`,
                       transition: 'all 0.2s ease-in',
                     }}
-                    onClick={() => setOpenCustomComponents((prev) => !prev)}
+                    onClick={() => setOpenMUIComponents((prev) => !prev)}
                   >
                     <ArrowDropDownSharpIcon />
                   </IconButton>
                 </Box>
-                <Collapse in={openCustomComponents} orientation={'vertical'}>
-                  <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gap={1} padding={1} pt={0}>
-                    {filteredItems.map(([componentId, componentType]) => {
+                <Collapse in={openMUIComponents} orientation={'vertical'}>
+                  <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gap={1} padding={1}>
+                    {filteredMUIItems.map(([componentId, componentType]) => {
                       invariant(
                         componentType,
                         `No component definition found for "${componentId}"`,
                       );
-                      return !componentType.builtIn ? (
+                      return componentType.builtIn && !componentType.system ? (
                         <ComponentCatalogItem
                           key={componentId}
                           id={componentId}
                           draggable
                           onDragStart={handleDragStart(componentId)}
                           displayName={componentType.displayName}
-                          kind={'custom'}
+                          builtIn={componentType.builtIn}
+                          kind={'builtIn'}
                         />
                       ) : null;
                     })}
-                    <ComponentCatalogItem
-                      id="CreateNew"
-                      displayName="Create"
-                      kind="create"
-                      onClick={handleCreateCodeComponentDialogOpen}
-                    />
                   </Box>
                 </Collapse>
-
-                <Box padding={1}>
-                  <Box
-                    sx={(theme) => ({
-                      py: 2,
-                      pl: 1,
-                      pr: 0.5,
-                      borderWidth: 1,
-                      borderStyle: 'solid',
-                      borderRadius: 1,
-                      backgroundColor: darken(theme.palette.background.default, 0.1),
-                      borderColor: theme.palette.divider,
-                    })}
-                  >
-                    <Box pb={0} display="flex" flexDirection={'row'} justifyContent="space-between">
-                      <Typography variant="body2" color="text.secondary">
-                        More components coming soon!
-                      </Typography>
-                      <IconButton
-                        aria-label="Expand custom components"
-                        sx={{
-                          p: 0,
-                          height: '100%',
-                          alignSelf: 'start',
-                          cursor: 'pointer',
-                          transform: `rotate(${openFutureComponents ? 180 : 0}deg)`,
-                          transition: 'all 0.2s ease-in',
-                        }}
-                        onClick={() => setOpenFutureComponents((prev) => !prev)}
-                      >
-                        <ArrowDropDownSharpIcon />
-                      </IconButton>
-                    </Box>
-                    <Collapse in={openFutureComponents} orientation={'vertical'}>
-                      <Typography variant="caption" color="text.secondary">
-                        👍 Upvote on GitHub to get it prioritized.
-                      </Typography>
-                      <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gap={1} pt={1} pb={0}>
-                        {Array.from(FUTURE_COMPONENTS, ([key, { displayName, url }]) => {
-                          return (
-                            <Link
-                              href={url}
-                              underline="none"
-                              target="_blank"
-                              key={`futureComponent.${key}`}
-                            >
-                              <ComponentCatalogItem
-                                id={key}
-                                displayName={displayName}
-                                kind={'future'}
-                              />
-                            </Link>
-                          );
-                        })}
-                      </Box>
-                    </Collapse>
-                  </Box>
-                </Box>
               </Box>
             </Box>
           </Collapse>

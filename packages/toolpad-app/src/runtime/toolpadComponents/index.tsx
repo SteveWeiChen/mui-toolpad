@@ -86,6 +86,7 @@ export const INTERNAL_COMPONENTS = new Map<string, ToolpadComponentDefinition>([
   ['Select', { displayName: 'Select', builtIn: 'Select', synonyms: ['combobox', 'dropdown'] }],
   ['List', { displayName: 'List', builtIn: 'List', synonyms: ['repeat'] }],
   ['Paper', { displayName: 'Paper', builtIn: 'Paper', synonyms: ['surface'] }],
+  ['NavBar', { displayName: 'NavBar', builtIn: 'NavBar', synonyms: ['header'] }],
   ['Tabs', { displayName: 'Tabs', builtIn: 'Tabs', synonyms: [] }],
   ['Container', { displayName: 'Container', builtIn: 'Container', synonyms: [] }],
   ['Metric', { displayName: 'Metric', builtIn: 'Metric', synonyms: ['value', 'number', 'output'] }],

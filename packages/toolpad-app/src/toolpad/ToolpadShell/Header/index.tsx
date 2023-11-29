@@ -63,7 +63,7 @@ function Header({ actions, status, enableUserFeedback = true }: HeaderProps) {
                     fontFamily: theme.typography.fontFamily,
                   }}
                 >
-                  MUI Toolpad
+                  NexusUI Toolpad
                 </Box>
               </Link>
             </Tooltip>
